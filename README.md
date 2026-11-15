@@ -1,36 +1,56 @@
-# Codename-FigLicious
+# FigLicious GNOME HOME Wardriver
 
-A GNOME HOME rebrand concept for the Piglet wardriver.
+I am building this firmware for a Seeed XIAO ESP32-C5 with a 480×320 ST7796S SPI display, XPT2046 resistive touch, microSD storage, and a UART GPS receiver. The firmware uses only observations reported by connected hardware. A missing GPS fix, SD card, or radio receiver is shown as unavailable instead of being replaced with sample data.
 
-## Touchscreen preview
+I keep the browser dashboard prototype at [dashboard-preview/index.html](dashboard-preview/index.html). Its vector portraits are concept stand-ins; I will replace them with the supplied character artwork when I prepare the final artwork assets.
 
-Open [dashboard-preview/index.html](dashboard-preview/index.html) in a desktop or mobile browser. The interface is laid out at the target display's 480×320 landscape ratio and scales to fit the browser window.
+## Radio-use confirmation
 
-- **Home:** Miss Direction frames the GPS readout. Use the GPS PRESENT switch above the screen to preview receiver-present and no-fix states.
-- **Ward Ride:** Tap Lady Dualbandit to open the field interface. Its horizontally scrollable tabs include Hunt, Radar, Finds, Security, Channel, Spectrum, Field, Tools, Alerts, GPS, Privacy, and Transfer.
-- **Hunt:** Filter All, Wi-Fi, BLE, Classic Bluetooth, Cellular, Mesh, or ADS-B; sort by RSSI, recency, sightings, or name. Contact rows show signal tiers and sighting counts. Tap a row for details; long-press it to open Foxhunt.
-- **Foxhunt:** Follow sample RSSI as a hot/warm/cold cue and toggle the beeper or silence. The browser preview does not drive a physical beeper.
-- **Radar / Finds:** Preview live proximity tiers and the historical finds map.
-- **Security / Channel / Spectrum:** Review sample encryption and channel counts, plus a sample spectrum trace. Handshake/PMKID capture is not enabled.
-- **Field / Tools / Alerts:** Browse manufacturer and device classes, Remote ID, mesh/ADS-B/cellular hardware status, and heuristic alert categories.
-- **GPS:** View sample fix and satellite diagnostics; the home screen shows Miss Direction only when GPS is present.
-- **Privacy:** Preview _nomap/_optout, blacklist, and exclusion-zone controls.
-- **Transfer:** Preview CSV import/export and queued upload actions.
-- **SD Card:** Tap Cache Cassidy to browse the sample log directory and file list. These entries are demonstration data.
+The radio interface is designed for lab use only. Before I start a radio scan, I must check the box and press **Confirm**:
 
-The preview is informed by the supplied GNOME HOME loading-screen reference and Wardrive-Go’s feature organization. Its vector portraits are concept stand-ins; replace them with optimized crops/sprites from the source artwork before the firmware port.
+> I confirm I will use this device only in a lab or on systems I am authorized to assess. This firmware performs receive-only scans.
 
-## Firmware integration status
+The confirmation is saved on the device. Scanning stays locked until I confirm. Wi-Fi deauthentication, spoofing, and packet injection are not included.
 
-This is a browser-based UI prototype. It does not yet read live GPS, scan counters, or SD contents, and it is not a flashable firmware build.
+## Hardware pinout
 
-Piglet v3.06 currently uses a 128×64 monochrome SSD1306 interface. Bringing this 480×320 SPI ST7796S display online requires a TFT display backend, a resistive-touch driver and calibration, and verified wiring for the specific display and target board. The firmware pin map is intentionally still open.
+I preserve the XIAO ESP32-C5's normal SPI pins from the pinout diagram: D8/GPIO8 SCK, D9/GPIO9 MISO, and D10/GPIO10 MOSI. The display, touch controller, and SD card share those SPI signals and each uses a separate chip-select line.
 
-The ESP32-C5 has dual-band Wi-Fi (2.4/5 GHz) and Bluetooth LE. Classic Bluetooth is unsupported by the chip. Cellular and ADS-B require separate receivers; Meshtastic/MeshCore node scanning requires a compatible sub-GHz radio. The prototype keeps these categories visible and marks absent hardware instead of inventing live results.
+| Connection | XIAO ESP32-C5 | Module pin | Notes |
+| --- | --- | --- | --- |
+| SPI clock | D8 / GPIO8 | TFT SCK, touch T_CLK, SD SCK | Shared SPI clock |
+| SPI controller input | D9 / GPIO9 | TFT SDO, touch T_DO, SD MISO | Shared MISO |
+| SPI controller output | D10 / GPIO10 | TFT SDI, touch T_DIN, SD MOSI | Shared MOSI |
+| TFT chip select | D2 / GPIO25 | TFT CS | Dedicated display select |
+| TFT data/command | D3 / GPIO7 | TFT DC/RS | Dedicated display control |
+| Touch chip select | D6 / GPIO11 | Touch T_CS | XPT2046 select; touch IRQ is left unconnected and polled |
+| SD chip select | D4 / GPIO23 | SD_CS | Dedicated SD select; use the display board's SD_CS pad if using its onboard socket |
+| GPS receive | D7 / GPIO12 (RX) | GPS TX | GPS TX is the only GPS data wire connected; leave GPS RX unconnected |
+| Ground | GND | GND | Common ground |
+| Module power | 3V3 or 5V per the board selector | VCC | Follow the display board's J1 voltage-selector marking before applying power |
 
-## References
+The XIAO pinout image also assigns D0/GPIO1 to Ebyte CE, D1/GPIO0 to Ebyte CSN, and D5/GPIO24 to CC-CS; those assignments are preserved. I have not assigned an actuator pin. Beep and vibration choices remain unavailable until I identify the connected hardware and its wiring.
 
-- Piglet v3.06: <https://github.com/Hamspiced/piglet/releases/tag/v3.06>
-- Wardrive-Go: <https://github.com/RocketGod-git/wardrive-go>
+I check the display breakout's silkscreen and J1 setting before connecting power. The available photos identify the board family and its 480×320 SPI interface, but do not clearly establish the jumper setting or every connector label. I leave TFT reset disconnected from the XIAO and hold the display reset line inactive as documented for the breakout; I do not connect a signal to a pin whose function is unclear. I confirm the breakout's exact pin labels against its own silkscreen before powering it.
 
-The prototype is independently written and does not copy either project's firmware or Android source. Piglet v3.06 is distributed under CC BY-NC-SA 4.0; Wardrive-Go is distributed under GPL-3.0. Review their terms before incorporating upstream code. This repository retains its existing MPL-2.0 license.
+The assignments use the GPIOs shown in my XIAO C5 design reference and do not use the GPIO26/27/28 boot-mode strap group. GPIO25 and GPIO7 are also boot-time sampled pins on the C5 family; the display's CS/DC inputs must not drive them to an unintended level during reset. I verify the breakout input bias and startup behavior before treating boot reliability as hardware-tested.
+
+## Firmware build
+
+I build the C5 firmware with PlatformIO:
+
+```sh
+pio run -e wardriver
+```
+
+The resulting application image is `.pio/build/wardriver/firmware.bin`. To flash from PlatformIO when the XIAO is connected:
+
+```sh
+pio run -e wardriver -t upload
+```
+
+I do not call an image flashable until the build completes successfully. I have not tested this firmware on connected hardware.
+
+## `libnet80211.a` status
+
+I keep the supplied `updated-lib/libnet80211.a` in the project as an artifact to investigate. It is an archive of RISC-V objects, but matching the C5 architecture alone does not establish SDK, compiler, or ABI compatibility. I do not link it into this build until those compatibility checks succeed. It is not a drop-in Arduino Wi-Fi API. The current firmware uses the installed ESP32 Arduino Wi-Fi receive/scanning interfaces and does not enable transmit attacks.
