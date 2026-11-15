@@ -81,6 +81,56 @@ button{cursor:pointer}.home-grid{height:100%;display:grid;grid-template-rows:1.0
 .notice{position:absolute;bottom:4px;left:0;right:0;text-align:center;color:#75cbd5;font-size:clamp(6px,1.45cqw,7px);letter-spacing:.05em;z-index:2}
 #gpsToggle{display:flex;align-items:center;gap:8px;color:#b3d1d8;font-size:12px}.switch{width:38px;height:21px;border:1px solid #478090;border-radius:20px;background:#173543;padding:2px;cursor:pointer}.switch i{display:block;width:15px;height:15px;border-radius:50%;background:#94afba;transition:transform .15s}.switch.on{border-color:#49d88a;background:#1e4839}.switch.on i{transform:translateX(16px);background:#8effb8}
 #screen.gps-connected .no-gps{display:none}#screen:not(.gps-connected) .miss-panel .portrait{display:none}#screen:not(.gps-connected) .miss-panel:after{content:"GPS OFF"}#screen:not(.gps-connected) .miss-panel .no-gps{display:flex}
+
+.subtabs{height:11%;display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none;margin-bottom:1.2%}.subtabs::-webkit-scrollbar,.filters::-webkit-scrollbar{display:none}
+.subtab{height:82%;flex:1 0 auto;border:1px solid #255768;border-radius:6px;background:#0a202a;color:#9fc1c9;font:700 clamp(7px,1.65cqw,9px) ui-monospace;letter-spacing:.04em;padding:0 7px}
+.subtab.active{border-color:#e73dbd;background:#321746;color:#fff}
+.wd-shell{height:100%;display:flex;flex-direction:column}
+.wd-panel{height:87%;min-height:0;border:1px solid #265d6e;border-radius:8px;padding:2%;background:linear-gradient(145deg,#10313e,#091922);overflow:hidden}
+.filters{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;margin-bottom:5px}
+.filter{flex:none;border:1px solid #285666;border-radius:12px;background:#0a202a;color:#a9cad1;padding:4px 7px;font:700 clamp(6px,1.45cqw,8px) ui-monospace}
+.filter.active{background:#124f5e;border-color:#24cfdb;color:#e8ffff}
+.filter.offline{color:#71888e;border-style:dashed}
+.hunt-head{height:18%;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.hunt-head strong{color:#f6fbff;font-size:clamp(8px,2.2cqw,11px)}
+.hunt-head select{max-width:48%;border:1px solid #386977;border-radius:5px;background:#071922;color:#c7e5eb;padding:4px;font:clamp(7px,1.6cqw,8px) ui-monospace}
+.contact-list{height:75%;display:flex;flex-direction:column;gap:4px;overflow:auto}
+.contact{flex:1;min-height:30px;display:grid;grid-template-columns:9px minmax(0,1fr) auto auto;align-items:center;gap:5px;padding:4px 6px;border:1px solid #274c58;border-radius:5px;background:#081c25;color:#edfaff;text-align:left;font:inherit;touch-action:pan-y}
+.contact .tier{width:7px;height:7px;border-radius:50%;background:#45efb1;box-shadow:0 0 6px currentColor}
+.contact.tier-named .tier{background:#ffc357}.contact.tier-unknown .tier{background:#9aaeb4}
+.contact b{display:block;font-size:clamp(7px,1.8cqw,9px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.contact small{display:block;color:#88aeb7;font-size:clamp(6px,1.45cqw,7px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.contact em{font-style:normal;font-size:clamp(7px,1.7cqw,9px);color:#56e8ee;white-space:nowrap}
+.contact .sights{font-size:clamp(6px,1.45cqw,7px);color:#c3d9de}
+.offline-note{border:1px dashed #5f7980;color:#94aab0;border-radius:6px;padding:5px 7px;font-size:clamp(6px,1.5cqw,8px)}
+.grid2{height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5px}
+.data-card{border:1px solid #285663;border-radius:6px;background:#081c25;padding:6px;min-height:0;overflow:hidden}
+.data-card h3{font-size:clamp(7px,1.75cqw,9px);margin:0 0 4px;color:#ffd083;letter-spacing:.08em}
+.data-card p,.data-card li{font-size:clamp(6px,1.45cqw,8px);color:#a9c5cc;margin:2px 0}
+.data-card ul{padding-left:11px;margin:2px 0}
+.barline{display:flex;align-items:center;gap:4px;margin:3px 0;font-size:clamp(6px,1.4cqw,7px);color:#b5d2d8}
+.barline i{height:4px;border-radius:4px;background:linear-gradient(90deg,#24d8df,#ff9c28);display:inline-block}
+.chips{display:flex;flex-wrap:wrap;gap:3px}
+.chip{border:1px solid #315f6c;border-radius:10px;color:#b8dbe1;padding:2px 5px;font-size:clamp(6px,1.4cqw,7px)}
+.chip.new{border-color:#3eaf75;color:#9affbb}
+.tool-list{display:grid;grid-template-columns:1fr 1fr;gap:5px;height:100%}
+.tool-card{border:1px solid #285663;border-radius:6px;background:#081c25;padding:6px;display:flex;flex-direction:column;justify-content:space-between}
+.tool-card b{font-size:clamp(7px,1.7cqw,9px);color:#e9f9fc}
+.tool-card small{font-size:clamp(6px,1.4cqw,7px);color:#8faeb6}
+.tool-card .ready{color:#91ffb6}.tool-card .needed{color:#f4bd73}
+.alert-grid{height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:4px}
+.alert-item{border:1px solid #6a4770;border-radius:5px;background:#1d1727;padding:5px;color:#ebc6e8;font-size:clamp(6px,1.5cqw,8px)}
+.alert-item b{display:block;color:#ff9de9;margin-bottom:2px}
+.fox{height:100%;display:grid;grid-template-columns:31% 1fr;gap:3%}
+.fox-face{border:1px solid #d43bb4;border-radius:8px;display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(circle at 50% 30%,#53204f,#0b1a27);overflow:hidden}
+.fox-info{display:flex;flex-direction:column;justify-content:space-between;min-width:0;padding:2px}
+.fox-info h2{font-size:clamp(10px,2.8cqw,14px);color:#ff9de8;margin:0}
+.fox-rssi{font-size:clamp(22px,6cqw,30px);font-weight:900;color:#56edf2}
+.heat{height:9px;border-radius:8px;background:linear-gradient(90deg,#35d6ef 0 35%,#f6d447 55%,#ff5637 100%);position:relative;overflow:hidden}
+.heat:after{content:"";position:absolute;left:var(--heat,70%);top:0;bottom:0;width:4px;background:#fff;box-shadow:0 0 7px #fff}
+.fox-controls{display:flex;gap:5px;align-items:center}.fox-controls button{flex:1}
+#screen .action.ghost{border-color:#3f7782;background:#0a2732;color:#c9e7ec}
+
 @media(max-width:560px){body{padding:10px}.housing{padding:5px;border-radius:13px}.title{font-size:10px}.title .helper{display:none}}
 </style>
 </head>
@@ -175,37 +225,47 @@ button{cursor:pointer}.home-grid{height:100%;display:grid;grid-template-rows:1.0
 </template>
 
 <template id="tpl-wardrive">
-<div class="wardrive">
-  <aside class="duo-portrait"><svg viewBox="0 0 125 210" role="img" aria-label="Lady Dualbandit with pink and blue hair">
-    <path d="M8 210V94Q0 43 31 19Q61-5 78 25Q104 0 117 47L110 210Z" fill="#e834c7"/>
-    <path d="M35 59Q34 32 61 31Q87 31 87 61L81 88Q70 104 59 103Q40 98 35 79Z" fill="#f0c09e"/>
-    <path d="M31 60Q17 20 48 14Q70 11 75 39L65 56Q49 39 34 74Z" fill="#ff43b3"/>
-    <path d="M72 43Q84 11 103 30Q121 52 91 85L81 76Q100 49 79 43Z" fill="#2bcff1"/>
-    <circle cx="50" cy="64" r="10" fill="none" stroke="#ff54cf" stroke-width="4"/><circle cx="73" cy="64" r="10" fill="none" stroke="#35cafa" stroke-width="4"/><path d="M60 63h4" stroke="#27213a" stroke-width="3"/>
-    <path d="M52 82q9 7 18 0" fill="none" stroke="#a84957" stroke-width="2"/>
-    <path d="M26 124Q61 96 94 124L111 210H12Z" fill="#653396" stroke="#2ce5ef" stroke-width="3"/><path d="M43 120l19 24 17-24" fill="#151e35" stroke="#f2b3e8" stroke-width="2"/><circle cx="62" cy="154" r="8" fill="#ec37c7"/><path d="M62 148v12m-6-6h12" stroke="#effaff" stroke-width="2"/>
-    <path d="M19 150l-9 31m88-32 13 27" stroke="#f0c09e" stroke-width="8" stroke-linecap="round"/>
-  </svg></aside>
-  <div class="wd-info">
-    <div class="wd-head"><div><b>WARD RIDE</b><div style="color:#9bb9c1;font-size:clamp(7px,1.7cqw,9px)">LADY DUALBANDIT · TWO-BAND SCAN</div></div><span id="scanstate" class="scanstate">● SCANNING</span></div>
-    <div class="map"><span class="maplabel">FIELD MAP · CURRENT FIX</span></div>
-    <div class="bands"><div class="band"><b id="count24">024</b><small>2.4 GHz · NETWORKS</small></div><div class="band"><b id="count5">009</b><small>5 GHz · NETWORKS</small></div></div>
-    <div class="wd-bottom"><button id="scanButton" class="action running">PAUSE SCAN</button><span class="gps-mini"><span class="lat">39.43281° N</span> · <span class="lon">123.38124° W</span> · <span class="speed">0.0</span> MPH</span></div>
-  </div>
+<div class="wd-shell">
+  <div class="subtabs" id="wdTabs"></div>
+  <section class="wd-panel" id="wdPanel"></section>
 </div>
-<div class="notice">LOGGING TO SD · AUTHORIZED PASSIVE NETWORK DISCOVERY</div>
+<div class="notice">LONG-PRESS A CONTACT TO FOXHUNT · SAMPLE DATA IN PREVIEW</div>
 </template>
 
 <script>
 const screen=document.getElementById('screen'), view=document.getElementById('view'), dock=document.getElementById('dock');
-let page='home', gps=true, scanning=true, tick=0;
+let page='home', gps=true, scanning=true, activeTab='hunt', currentTarget=null, beepEnabled=true;
 const nav=[['home','HOME'],['wardrive','WARD RIDE'],['sd','SD CARD']];
-function setPage(next){page=next;render()}
+function setPage(next){page=next;if(next==='wardrive')activeTab='hunt';render()}
 function renderDock(){dock.innerHTML=nav.map(([id,label])=>'<button data-page="'+id+'" class="'+(page===id?'active':'')+'">'+label+'</button>').join('')}
-function render(){const tpl=document.getElementById('tpl-'+page);view.innerHTML=tpl.innerHTML;renderDock();syncGps();if(page==='sd')wireFiles();if(page==='wardrive')wireScanner()}
+function render(){const tpl=document.getElementById('tpl-'+page);view.innerHTML=tpl.innerHTML;renderDock();syncGps();if(page==='sd')wireFiles();if(page==='wardrive')wireWardrive()}
 function syncGps(){screen.classList.toggle('gps-connected',gps);const pill=document.getElementById('gpsPill');pill.className='pill '+(gps?'good':'warn');pill.textContent=gps?'GPS FIX · 8 SAT':'NO GPS · SEARCH';document.querySelectorAll('.satCount').forEach(x=>x.textContent=gps?'8':'—');document.querySelectorAll('.lat').forEach(x=>x.textContent=gps?'39.43281° N':'—');document.querySelectorAll('.lon').forEach(x=>x.textContent=gps?'123.38124° W':'—');document.querySelectorAll('.speed').forEach(x=>x.textContent=gps?'0.0':'—');document.querySelectorAll('.heading').forEach(x=>x.textContent=gps?'NW':'—')}
 function wireFiles(){document.querySelectorAll('.file').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.file').forEach(x=>x.classList.remove('selected'));button.classList.add('selected');const kind=button.dataset.file;if(kind==='logs'){button.querySelector('em').textContent='14 CSV ›'}else{button.querySelector('em').textContent='SELECTED'};}))}
-function wireScanner(){const b=document.getElementById('scanButton'),state=document.getElementById('scanstate');if(!b)return;b.addEventListener('click',()=>{scanning=!scanning;b.textContent=scanning?'PAUSE SCAN':'RESUME SCAN';b.classList.toggle('running',scanning);state.textContent=scanning?'● SCANNING':'Ⅱ PAUSED';state.style.color=scanning?'#91ffb6':'#ffd38c';if(!scanning)state.style.borderColor='#bd873c'})}
+const wdTabs=[['hunt','HUNT'],['security','SECURITY'],['field','FIELD'],['tools','TOOLS'],['alerts','ALERTS']];
+const contacts=[
+ {name:'GNOME_GUEST',sub:'Wi-Fi AP · WPA2 · 2.4 GHz',proto:'Wi-Fi',rssi:-42,seen:1,sights:11,tier:'known',fresh:'REPEAT'},
+ {name:'ESP32-VROOM',sub:'BLE · Espressif · unknown device',proto:'BLE',rssi:-73,seen:2,sights:2,tier:'named',fresh:'NEW'},
+ {name:'Unknown_5G',sub:'Wi-Fi AP · WPA3 · 5 GHz',proto:'Wi-Fi',rssi:-88,seen:3,sights:1,tier:'unknown',fresh:'NEW'}
+];
+let activeFilter='All', sortMode='RSSI';
+function renderWardriveTabs(){const el=document.getElementById('wdTabs');if(!el)return;el.innerHTML=wdTabs.map(([id,label])=>'<button class="subtab '+(activeTab===id?'active':'')+'" data-tab="'+id+'">'+label+'</button>').join('');el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderWardriveTabs();renderWardrivePanel()})}
+function renderWardrivePanel(){const panel=document.getElementById('wdPanel');if(!panel)return;
+ if(activeTab==='hunt') panel.innerHTML=renderHunt();
+ else if(activeTab==='security') panel.innerHTML='<div class="grid2"><div class="data-card"><h3>SECURITY MIX</h3><div class="barline">Open <i style="width:14%"></i> 2</div><div class="barline">WEP <i style="width:3%"></i> 0</div><div class="barline">WPA/WPA2 <i style="width:72%"></i> 18</div><div class="barline">WPA3 <i style="width:35%"></i> 8</div><div class="barline">Enterprise <i style="width:10%"></i> 1</div></div><div class="data-card"><h3>BANDS / CHANNELS</h3><p>2.4 GHz · ch 1 / 6 / 11</p><p>5 GHz · ch 36 / 149</p><p>6 GHz · receiver required</p></div><div class="data-card"><h3>FRAME TYPES</h3><p>Access points · clients · Wi-Fi Direct peers</p></div><div class="data-card"><h3>CAPTURE STATUS</h3><p>Handshake / PMKID capture is not enabled in this build.</p></div></div>';
+ else if(activeTab==='field') panel.innerHTML='<div class="grid2"><div class="data-card"><h3>VENDOR / OUI</h3><p>Apple · 06</p><p>Samsung · 04</p><p>Espressif · 03</p><p>Ubiquiti · 02</p></div><div class="data-card"><h3>FORM FACTOR</h3><div class="chips"><span class="chip">Phones</span><span class="chip">Audio</span><span class="chip">IoT</span><span class="chip">Vehicles</span><span class="chip">Beacons</span></div></div><div class="data-card"><h3>SIGHTINGS</h3><p><span class="chip new">FIRST TIME · 04</span></p><p>Repeat devices · 21</p></div><div class="data-card"><h3>SELECTED CONTACT</h3><p>Lifetime sightings and last seen are shown per observed identifier.</p></div></div>';
+ else if(activeTab==='tools') panel.innerHTML='<div class="tool-list"><div class="tool-card"><b>DRONE / REMOTE ID</b><small>BLE / Wi-Fi broadcast discovery</small><small class="ready">BLE READY · Wi-Fi support depends on firmware</small></div><div class="tool-card"><b>MESH NODES</b><small>Meshtastic / MeshCore node IDs</small><small class="needed">LoRa receiver required</small></div><div class="tool-card"><b>ADS-B AIRCRAFT</b><small>ICAO · callsign · altitude · speed</small><small class="needed">ADS-B receiver required</small></div><div class="tool-card"><b>CELLULAR</b><small>Carrier · LTE/5G · cell ID</small><small class="needed">Cellular receiver required</small></div></div>';
+ else if(activeTab==='alerts') panel.innerHTML='<div class="alert-grid"><div class="alert-item"><b>CAMERAS / ALPR</b>Camera and roadside-infrastructure signatures</div><div class="alert-item"><b>PERSONAL TRACKERS</b>BLE tracker ecosystem matches</div><div class="alert-item"><b>PUBLIC-SAFETY RF</b>Possible radio or vehicle identifiers</div><div class="alert-item"><b>RF / TEST GEAR</b>Known development and test-device signatures</div><div class="alert-item"><b>WEARABLES</b>Health, smart-glass and accessory classes</div><div class="alert-item"><b>VERIFY MATCHES</b>Classification is heuristic; confirm before acting.</div></div>';
+ else panel.innerHTML=renderFox();
+ if(activeTab==='hunt') wireHunt(panel);
+ if(activeTab==='fox') wireFox(panel)
+}
+function renderHunt(){const all=['All','Wi-Fi','BLE','Classic BT','Cellular','Mesh','ADS-B'];return '<div class="filters">'+all.map(f=>'<button class="filter '+(activeFilter===f?'active':'')+(['All','Wi-Fi','BLE'].includes(f)?'':'offline')+'" data-filter="'+f+'">'+f+'</button>').join('')+'</div><div class="hunt-head"><strong>LIVE CONTACTS · <span id="contactCount">03</span></strong><select id="sortMode" aria-label="Sort contacts"><option>RSSI</option><option>Recency</option><option>Sightings</option><option>Name</option></select></div><div class="contact-list" id="contactList"></div>'}
+function renderContactRows(){const list=document.getElementById('contactList');if(!list)return;let rows=contacts.filter(c=>activeFilter==='All'||c.proto===activeFilter);if(!['All','Wi-Fi','BLE'].includes(activeFilter)){list.innerHTML='<div class="offline-note">'+activeFilter+' · receiver / radio support required on this C5 configuration</div>';document.getElementById('contactCount').textContent='—';return}if(sortMode==='RSSI')rows.sort((a,b)=>b.rssi-a.rssi);if(sortMode==='Recency')rows.sort((a,b)=>a.seen-b.seen);if(sortMode==='Sightings')rows.sort((a,b)=>b.sights-a.sights);if(sortMode==='Name')rows.sort((a,b)=>a.name.localeCompare(b.name));document.getElementById('contactCount').textContent=String(rows.length).padStart(2,'0');list.innerHTML=rows.map((c,i)=>'<button class="contact tier-'+c.tier+'" data-contact="'+i+'"><i class="tier"></i><span><b>'+c.name+'</b><small>'+c.sub+' · '+c.fresh+'</small></span><em>'+c.rssi+' dBm</em><span class="sights">×'+c.sights+'</span></button>').join('');wireContacts(list,rows)}
+function wireHunt(panel){panel.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{activeFilter=b.dataset.filter;renderWardrivePanel()});const select=panel.querySelector('#sortMode');if(select){select.value=sortMode;select.onchange=()=>{sortMode=select.value;renderContactRows()}}renderContactRows()}
+function wireContacts(list,rows){list.querySelectorAll('[data-contact]').forEach(btn=>{let timer=null,held=false;const begin=()=>{held=false;timer=setTimeout(()=>{held=true;currentTarget=rows[Number(btn.dataset.contact)];activeTab='fox';renderWardriveTabs();renderWardrivePanel()},600)};const cancel=()=>{if(timer)clearTimeout(timer);timer=null};btn.addEventListener('pointerdown',begin);['pointerup','pointerleave','pointercancel'].forEach(ev=>btn.addEventListener(ev,cancel));btn.addEventListener('contextmenu',e=>e.preventDefault());btn.onclick=()=>{if(!held){currentTarget=rows[Number(btn.dataset.contact)];btn.classList.add('selected')}}})}
+function renderFox(){const t=currentTarget||contacts[0],heat=Math.max(5,Math.min(96,100+Number(t.rssi)));return '<div class="fox"><aside class="fox-face"><svg viewBox="0 0 125 210" aria-label="Lady Dualbandit foxhunt portrait"><path d="M8 210V94Q0 43 31 19Q61-5 78 25Q104 0 117 47L110 210Z" fill="#e834c7"/><path d="M35 59Q34 32 61 31Q87 31 87 61L81 88Q70 104 59 103Q40 98 35 79Z" fill="#f0c09e"/><path d="M31 60Q17 20 48 14Q70 11 75 39L65 56Q49 39 34 74Z" fill="#ff43b3"/><path d="M72 43Q84 11 103 30Q121 52 91 85L81 76Q100 49 79 43Z" fill="#2bcff1"/><circle cx="50" cy="64" r="10" fill="none" stroke="#ff54cf" stroke-width="4"/><circle cx="73" cy="64" r="10" fill="none" stroke="#35cafa" stroke-width="4"/></svg></aside><div class="fox-info"><div><button class="back" data-tab="hunt">‹ CONTACTS</button><h2>FOXHUNT</h2><small>'+t.name+' · '+t.proto+'</small></div><div><div class="fox-rssi">'+t.rssi+' dBm</div><div class="heat" style="--heat:'+heat+'%"></div><div class="eyebrow" style="margin-top:5px">'+(t.rssi>-55?'HOT':t.rssi>-72?'WARM':'COLD')+' · FOLLOW SIGNAL STRENGTH</div></div><div class="fox-controls"><button id="beepToggle" class="action '+(beepEnabled?'running':'ghost')+'">'+(beepEnabled?'BEEP ON':'SILENT')+'</button><button id="stopFox" class="action ghost">STOP</button></div></div></div>'}
+function wireFox(panel){const back=panel.querySelector('[data-tab="hunt"]');if(back)back.onclick=()=>{activeTab='hunt';renderWardriveTabs();renderWardrivePanel()};const b=panel.querySelector('#beepToggle');if(b)b.onclick=()=>{beepEnabled=!beepEnabled;renderWardrivePanel()};const stop=panel.querySelector('#stopFox');if(stop)stop.onclick=()=>{activeTab='hunt';currentTarget=null;renderWardriveTabs();renderWardrivePanel()}}
+function wireWardrive(){renderWardriveTabs();renderWardrivePanel()}
 document.addEventListener('click',e=>{const target=e.target.closest('[data-page]');if(target)setPage(target.dataset.page)});
 const sw=document.querySelector('.switch');function toggleGps(){gps=!gps;sw.classList.toggle('on',gps);sw.setAttribute('aria-checked',gps);syncGps()}
 sw.addEventListener('click',toggleGps);sw.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleGps()}});
