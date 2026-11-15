@@ -19,7 +19,7 @@ I preserve the XIAO ESP32-C5's normal SPI pins from the pinout diagram: D8/GPIO8
 | Connection | XIAO ESP32-C5 | Module pin | Notes |
 | --- | --- | --- | --- |
 | SPI clock | D8 / GPIO8 | TFT SCK, touch T_CLK, SD SCK | Shared SPI clock |
-| SPI controller input | D9 / GPIO9 | TFT SDO, touch T_DO, SD MISO | Shared MISO |
+| SPI controller input | D9 / GPIO9 | Touch T_DO, SD MISO; optional TFT SDO | The display SDO is for reading from the LCD. This firmware only writes pixels, so I can leave TFT SDO disconnected. If I add LCD read-back later, I connect TFT SDO to this same D9 MISO line. |
 | SPI controller output | D10 / GPIO10 | TFT SDI, touch T_DIN, SD MOSI | Shared MOSI |
 | TFT chip select | D2 / GPIO25 | TFT CS | Dedicated display select |
 | TFT data/command | D3 / GPIO7 | TFT DC/RS | Dedicated display control |
@@ -34,6 +34,8 @@ The XIAO pinout image also assigns D0/GPIO1 to Ebyte CE, D1/GPIO0 to Ebyte CSN, 
 I check the display breakout's silkscreen and J1 setting before connecting power. The available photos identify the board family and its 480×320 SPI interface, but do not clearly establish the jumper setting or every connector label. I leave TFT reset disconnected from the XIAO and hold the display reset line inactive as documented for the breakout; I do not connect a signal to a pin whose function is unclear. I confirm the breakout's exact pin labels against its own silkscreen before powering it.
 
 The assignments use the GPIOs shown in my XIAO C5 design reference and do not use the GPIO26/27/28 boot-mode strap group. GPIO25 and GPIO7 are also boot-time sampled pins on the C5 family; the display's CS/DC inputs must not drive them to an unintended level during reset. I verify the breakout input bias and startup behavior before treating boot reliability as hardware-tested.
+
+The display pin table identifies SDO/MISO as LCD read data and says it can be omitted when read-back is not needed. ([LCDWiki 4.0-inch ST7796 module pin table](https://www.lcdwiki.com/4.0inch_SPI_Module_ST7796))
 
 ## Firmware build
 
