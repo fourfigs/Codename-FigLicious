@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GNOME HOME · FigLicious Wardriver UI</title>
+<style>
+:root{--ink:#061821;--panel:#0b2733;--panel2:#103543;--line:#1bbbd0;--cyan:#2ce8ef;--gold:#ff9b18;--pink:#ff3fc4;--blue:#2ea7ff;--cream:#ffe7b4;--muted:#8db4bd;--green:#74f5aa}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#12394b 0,#06131b 60%);color:#effaff;font:14px/1.25 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;display:grid;place-items:center;padding:18px}
+.wrap{width:min(100%,760px)}.title{display:flex;align-items:center;justify-content:space-between;color:#9cc8d0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin:0 3px 10px}
+.housing{padding:8px;border-radius:20px;background:linear-gradient(145deg,#ff9b18 0 8%,#063d50 8% 92%,#ff9b18 92%);box-shadow:0 16px 60px #0009,0 0 0 1px #43e9ed}
+#screen{width:100%;aspect-ratio:3/2;position:relative;overflow:hidden;border-radius:11px;background:radial-gradient(ellipse at 70% 0,#1c5062 0,#081923 48%,#06131b 100%);border:2px solid #1be4eb;container-type:inline-size}
+#screen:before{content:"";position:absolute;inset:5px;border:1px solid #ff991b;border-radius:7px;pointer-events:none;z-index:8;opacity:.8}
+#screen:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 3px,#79eefa09 4px);pointer-events:none;z-index:9}
+.top{height:11.5%;display:flex;align-items:center;justify-content:space-between;padding:0 3.5%;border-bottom:1px solid #26bed0;background:linear-gradient(90deg,#103643dd,#071821dd);position:relative;z-index:1}
+.brand{font-weight:1000;font-size:clamp(12px,3.8cqw,19px);letter-spacing:.04em;color:#fff;text-shadow:2px 2px #ea7913,-1px -1px #10c5d5}
+.brand span{color:var(--gold)}.edition{color:#9bbcc4;font-size:clamp(7px,1.8cqw,9px);letter-spacing:.09em;margin-left:7px}
+.statuses{display:flex;align-items:center;gap:5px}.pill{border:1px solid #407484;border-radius:20px;padding:3px 6px;font-size:clamp(7px,1.65cqw,9px);color:#c7e6ed;white-space:nowrap}.pill.good{border-color:#45bc82;color:#94ffbb}.pill.warn{border-color:#e08e2b;color:#ffd387}
+.view{height:77.5%;padding:2% 2.2%;position:relative}
+.dock{height:11%;display:flex;align-items:center;justify-content:center;gap:5px;border-top:1px solid #267080;background:#08171f;padding:0 2%;position:relative;z-index:3}
+.dock button{height:78%;flex:1;border:1px solid #276c7b;border-radius:7px;background:#0a2935;color:#b7dce3;font:700 clamp(7px,1.75cqw,9px) ui-monospace,monospace;letter-spacing:.04em}
+.dock button.active{border-color:var(--gold);color:#fff;background:#2b281c;box-shadow:inset 0 0 10px #ff9b1822}
+button{cursor:pointer}.home-grid{height:100%;display:grid;grid-template-rows:1.04fr .96fr;gap:2.5%}
+.card{background:linear-gradient(140deg,#113543ed,#091b25f2);border:1px solid #226273;border-radius:9px;position:relative;overflow:hidden}
+.gps-card{display:grid;grid-template-columns:1.28fr .72fr;border-color:#db851d}
+.gps-data{padding:3.5% 4%;display:grid;grid-template-rows:auto 1fr auto}
+.eyebrow{font-size:clamp(7px,1.8cqw,9px);letter-spacing:.16em;color:#ffbd58;text-transform:uppercase;font-weight:bold}
+.coord{font-size:clamp(11px,3.05cqw,15px);font-weight:800;line-height:1.6;color:#eafcff;white-space:nowrap}
+.coord small{color:#81aab5;font-size:.72em;margin-right:5px}
+.metrics{display:flex;gap:5%;align-items:end}.metric strong{display:block;font-size:clamp(14px,4.3cqw,21px);color:var(--cyan);line-height:1}.metric span{font-size:clamp(7px,1.75cqw,9px);color:#9bb9c1;letter-spacing:.08em}
+.miss-panel{position:relative;display:flex;justify-content:center;align-items:flex-end;background:radial-gradient(ellipse at 50% 30%,#237087,#102c3a 65%,#091b25);border-left:1px solid #bd7625}
+.miss-panel:after{content:"MISS DIRECTION";position:absolute;bottom:5px;left:0;right:0;text-align:center;font-size:clamp(7px,1.7cqw,9px);letter-spacing:.11em;color:#ffd99b;text-shadow:0 1px #000}
+.portrait{height:92%;width:100%;filter:drop-shadow(0 2px 5px #0008)}
+.no-gps{display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:5px;text-align:center;color:#a2bbc2;font-size:clamp(8px,2cqw,10px);padding:12px}
+.no-gps .sat{font-size:25px;color:#efaa36}
+.launches{display:grid;grid-template-columns:1fr 1fr;gap:2.5%}
+.launch{display:flex;align-items:center;gap:4%;padding:4%;text-align:left;color:white;transition:transform .12s,filter .12s}
+.launch:active,.touch:active{transform:scale(.98);filter:brightness(1.2)}
+.launch.dual{border-color:#b536b7;background:linear-gradient(135deg,#281746,#0b2734 80%)}
+.launch.cache{border-color:#dc851d;background:linear-gradient(135deg,#352516,#0b2734 80%)}
+.launch-art{width:35%;height:93%;flex:none;border-radius:7px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#57406e,#101a2b)}
+.launch.cache .launch-art{background:radial-gradient(circle at 50% 30%,#7e5722,#271e15)}
+.launch-copy b{display:block;font-size:clamp(9px,2.6cqw,13px);line-height:1.2}
+.launch-copy small{display:block;margin-top:5px;color:#b5d0d6;font-size:clamp(7px,1.7cqw,9px)}
+.launch-copy .tap{color:#73dfe8;letter-spacing:.08em}
+.feature{height:100%;display:grid;grid-template-columns:34% 1fr;gap:2%;padding:2%;background:radial-gradient(ellipse at 20% 35%,#273256,#0b1c28 67%)}
+.feature-art{border-radius:9px;overflow:hidden;border:1px solid #a72a9d;background:linear-gradient(155deg,#301647,#101c2a);display:flex;align-items:end;justify-content:center}
+.feature-info{display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.feature-title{color:#ffa4ec;font-weight:900;font-size:clamp(11px,3.5cqw,17px);letter-spacing:.04em}.feature-title small{display:block;color:#9ab9c0;font-size:clamp(7px,1.7cqw,9px);font-weight:500;letter-spacing:.12em;margin-top:2px}
+.statrow{display:grid;grid-template-columns:1fr 1fr;gap:5px}.stat{background:#061820aa;border:1px solid #254b5b;border-radius:6px;padding:4px 6px}.stat b{display:block;color:#fff;font-size:clamp(11px,3.25cqw,16px)}.stat span{color:#91afb8;font-size:clamp(7px,1.65cqw,9px)}
+.action{min-height:24px;border-radius:6px;border:1px solid var(--pink);color:white;background:#571b50;font:800 clamp(8px,2cqw,10px) ui-monospace,monospace;letter-spacing:.08em;padding:5px 8px}
+.action.running{border-color:#56dd98;background:#103c30;color:#9affa9}
+.sd-layout{height:100%;display:grid;grid-template-columns:29% 1fr;gap:2%}
+.cassidy{border:1px solid #c17b24;border-radius:9px;background:linear-gradient(155deg,#3b2a16,#0e222b);display:flex;align-items:end;justify-content:center;position:relative;overflow:hidden}
+.cassidy span{position:absolute;top:7px;left:7px;font-size:clamp(7px,1.8cqw,9px);color:#ffd38c;font-weight:bold;letter-spacing:.08em}
+.filepanel{min-width:0;display:flex;flex-direction:column;gap:5px}
+.filehead{height:21%;display:flex;align-items:center;justify-content:space-between}
+.filehead h2{margin:0;color:#ffd18a;font-size:clamp(11px,3cqw,15px)}
+.filehead small{font-size:clamp(7px,1.6cqw,8px);color:#9bb8c0}
+.storage{height:6px;border-radius:6px;background:#132e39;overflow:hidden}.storage i{display:block;width:67%;height:100%;background:linear-gradient(90deg,#21d2d9,#ffa327);border-radius:6px}
+.filelist{display:flex;flex-direction:column;gap:4px;overflow:hidden;flex:1}
+.file{border:1px solid #26515f;background:#0a202a;border-radius:5px;display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:5px;padding:5px 7px;min-height:26px;text-align:left;color:#f2fdff;font:inherit}
+.file .icon{color:#56e8ee;font-size:16px}.file small{display:block;color:#89aeb7;font-size:clamp(6px,1.5cqw,8px)}.file em{font-style:normal;color:#ffc46e;font-size:clamp(7px,1.6cqw,8px)}
+.file.selected{border-color:var(--gold);background:#2d281e}
+.wardrive{height:100%;display:grid;grid-template-columns:28% 1fr;gap:2%}
+.duo-portrait{border:1px solid #bc36a6;border-radius:9px;overflow:hidden;background:radial-gradient(circle at 50% 20%,#49315f,#101b28);display:flex;align-items:end;justify-content:center}
+.wd-info{display:flex;flex-direction:column;gap:6px;min-width:0}
+.wd-head{display:flex;align-items:center;justify-content:space-between}
+.wd-head b{font-size:clamp(10px,3cqw,15px);color:#ffa3ed}
+.scanstate{font-size:clamp(7px,1.6cqw,8px);color:#91ffb6;border:1px solid #43956a;border-radius:12px;padding:3px 6px}
+.bands{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.band{padding:6px;border-radius:6px;background:#0a202a;border:1px solid #284f5d}
+.band b{display:block;font-size:clamp(15px,4.2cqw,21px);color:var(--cyan)}
+.band small{font-size:clamp(7px,1.7cqw,9px);color:#9dbbc3}
+.wd-bottom{display:flex;align-items:center;gap:6px;min-height:31px}
+.wd-bottom .action{flex:none}.gps-mini{min-width:0;color:#d8edf1;font-size:clamp(7px,1.7cqw,9px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map{flex:1;min-height:45px;border:1px solid #245361;border-radius:6px;position:relative;overflow:hidden;background:linear-gradient(35deg,transparent 48%,#155366 49% 51%,transparent 52%),linear-gradient(145deg,transparent 45%,#164558 46% 48%,transparent 49%),#081c25}
+.map:after{content:"";position:absolute;left:58%;top:42%;width:8px;height:8px;border:2px solid white;border-radius:50%;background:#ff4ec3;box-shadow:0 0 0 4px #ff4ec344,0 0 12px #ff46d0}
+.maplabel{position:absolute;left:5px;top:4px;font-size:7px;letter-spacing:.1em;color:#8dc2cb}
+.back{border:0;background:transparent;color:#98dbe3;font:700 9px ui-monospace;letter-spacing:.08em;padding:5px}
+.notice{position:absolute;bottom:4px;left:0;right:0;text-align:center;color:#75cbd5;font-size:clamp(6px,1.45cqw,7px);letter-spacing:.05em;z-index:2}
+#gpsToggle{display:flex;align-items:center;gap:8px;color:#b3d1d8;font-size:12px}.switch{width:38px;height:21px;border:1px solid #478090;border-radius:20px;background:#173543;padding:2px;cursor:pointer}.switch i{display:block;width:15px;height:15px;border-radius:50%;background:#94afba;transition:transform .15s}.switch.on{border-color:#49d88a;background:#1e4839}.switch.on i{transform:translateX(16px);background:#8effb8}
+#screen.gps-connected .no-gps{display:none}#screen:not(.gps-connected) .miss-panel .portrait{display:none}#screen:not(.gps-connected) .miss-panel:after{content:"GPS OFF"}#screen:not(.gps-connected) .miss-panel .no-gps{display:flex}
+
+.subtabs{height:11%;display:flex;gap:4px;align-items:center;overflow-x:auto;scrollbar-width:none;margin-bottom:1.2%}.subtabs::-webkit-scrollbar,.filters::-webkit-scrollbar{display:none}
+.subtab{height:82%;flex:1 0 auto;border:1px solid #255768;border-radius:6px;background:#0a202a;color:#9fc1c9;font:700 clamp(7px,1.65cqw,9px) ui-monospace;letter-spacing:.04em;padding:0 7px}
+.subtab.active{border-color:#e73dbd;background:#321746;color:#fff}
+.wd-shell{height:100%;display:flex;flex-direction:column}
+.wd-panel{height:87%;min-height:0;border:1px solid #265d6e;border-radius:8px;padding:2%;background:linear-gradient(145deg,#10313e,#091922);overflow:hidden}
+.filters{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;margin-bottom:5px}
+.filter{flex:none;border:1px solid #285666;border-radius:12px;background:#0a202a;color:#a9cad1;padding:4px 7px;font:700 clamp(6px,1.45cqw,8px) ui-monospace}
+.filter.active{background:#124f5e;border-color:#24cfdb;color:#e8ffff}
+.filter.offline{color:#71888e;border-style:dashed}
+.hunt-head{height:18%;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.hunt-head strong{color:#f6fbff;font-size:clamp(8px,2.2cqw,11px)}
+.hunt-head select{max-width:48%;border:1px solid #386977;border-radius:5px;background:#071922;color:#c7e5eb;padding:4px;font:clamp(7px,1.6cqw,8px) ui-monospace}
+.contact-list{height:75%;display:flex;flex-direction:column;gap:4px;overflow:auto}
+.contact{flex:1;min-height:30px;display:grid;grid-template-columns:9px minmax(0,1fr) auto auto;align-items:center;gap:5px;padding:4px 6px;border:1px solid #274c58;border-radius:5px;background:#081c25;color:#edfaff;text-align:left;font:inherit;touch-action:pan-y}
+.contact .tier{width:7px;height:7px;border-radius:50%;background:#45efb1;box-shadow:0 0 6px currentColor}
+.contact.tier-named .tier{background:#ffc357}.contact.tier-unknown .tier{background:#9aaeb4}
+.contact b{display:block;font-size:clamp(7px,1.8cqw,9px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.contact small{display:block;color:#88aeb7;font-size:clamp(6px,1.45cqw,7px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.contact em{font-style:normal;font-size:clamp(7px,1.7cqw,9px);color:#56e8ee;white-space:nowrap}
+.contact .sights{font-size:clamp(6px,1.45cqw,7px);color:#c3d9de}
+.offline-note{border:1px dashed #5f7980;color:#94aab0;border-radius:6px;padding:5px 7px;font-size:clamp(6px,1.5cqw,8px)}
+.grid2{height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5px}
+.data-card{border:1px solid #285663;border-radius:6px;background:#081c25;padding:6px;min-height:0;overflow:hidden}
+.data-card h3{font-size:clamp(7px,1.75cqw,9px);margin:0 0 4px;color:#ffd083;letter-spacing:.08em}
+.data-card p,.data-card li{font-size:clamp(6px,1.45cqw,8px);color:#a9c5cc;margin:2px 0}
+.data-card ul{padding-left:11px;margin:2px 0}
+.barline{display:flex;align-items:center;gap:4px;margin:3px 0;font-size:clamp(6px,1.4cqw,7px);color:#b5d2d8}
+.barline i{height:4px;border-radius:4px;background:linear-gradient(90deg,#24d8df,#ff9c28);display:inline-block}
+.chips{display:flex;flex-wrap:wrap;gap:3px}
+.chip{border:1px solid #315f6c;border-radius:10px;color:#b8dbe1;padding:2px 5px;font-size:clamp(6px,1.4cqw,7px)}
+.chip.new{border-color:#3eaf75;color:#9affbb}
+.tool-list{display:grid;grid-template-columns:1fr 1fr;gap:5px;height:100%}
+.tool-card{border:1px solid #285663;border-radius:6px;background:#081c25;padding:6px;display:flex;flex-direction:column;justify-content:space-between}
+.tool-card b{font-size:clamp(7px,1.7cqw,9px);color:#e9f9fc}
+.tool-card small{font-size:clamp(6px,1.4cqw,7px);color:#8faeb6}
+.tool-card .ready{color:#91ffb6}.tool-card .needed{color:#f4bd73}
+.alert-grid{height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:4px}
+.alert-item{border:1px solid #6a4770;border-radius:5px;background:#1d1727;padding:5px;color:#ebc6e8;font-size:clamp(6px,1.5cqw,8px)}
+.alert-item b{display:block;color:#ff9de9;margin-bottom:2px}
+.fox{height:100%;display:grid;grid-template-columns:31% 1fr;gap:3%}
+.fox-face{border:1px solid #d43bb4;border-radius:8px;display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(circle at 50% 30%,#53204f,#0b1a27);overflow:hidden}
+.fox-info{display:flex;flex-direction:column;justify-content:space-between;min-width:0;padding:2px}
+.fox-info h2{font-size:clamp(10px,2.8cqw,14px);color:#ff9de8;margin:0}
+.fox-rssi{font-size:clamp(22px,6cqw,30px);font-weight:900;color:#56edf2}
+.heat{height:9px;border-radius:8px;background:linear-gradient(90deg,#35d6ef 0 35%,#f6d447 55%,#ff5637 100%);position:relative;overflow:hidden}
+.heat:after{content:"";position:absolute;left:var(--heat,70%);top:0;bottom:0;width:4px;background:#fff;box-shadow:0 0 7px #fff}
+.fox-controls{display:flex;gap:5px;align-items:center}.fox-controls button{flex:1}
+#screen .action.ghost{border-color:#3f7782;background:#0a2732;color:#c9e7ec}
+
+
+.mini-map{height:86%;border:1px solid #2b6573;border-radius:7px;position:relative;overflow:hidden;background:radial-gradient(circle at 49% 52%,#16485a,#091a24 72%);display:grid;place-items:center}
+.mini-map:before,.mini-map:after{content:"";position:absolute;border:1px solid #2b7480;border-radius:50%;width:42%;height:74%}
+.mini-map:after{width:72%;height:94%}
+.radar-sweep{position:absolute;width:50%;height:50%;left:50%;top:0;background:linear-gradient(135deg,#23cdd322,transparent 70%);transform-origin:bottom left}
+.radar-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:#ff5acb;box-shadow:0 0 9px currentColor}
+.radar-dot.one{left:60%;top:27%;color:#ffca58}.radar-dot.two{left:36%;top:42%;color:#5cecf0;background:#5cecf0}.radar-dot.three{left:57%;top:70%;color:#9cffae;background:#9cffae}
+.map-grid{height:88%;border:1px solid #285b6b;border-radius:7px;position:relative;overflow:hidden;background:linear-gradient(30deg,transparent 48%,#256176 49% 51%,transparent 52%),linear-gradient(145deg,transparent 44%,#1d586d 45% 47%,transparent 48%),linear-gradient(80deg,transparent 37%,#1a4a5c 38% 40%,transparent 41%),#081a24}
+.map-grid:after{content:"";position:absolute;left:54%;top:49%;width:10px;height:10px;background:#ff4dc4;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 5px #ff4dc444}
+.channel-row{display:grid;grid-template-columns:35px 1fr 28px;align-items:center;gap:5px;margin:5px 0;color:#bad3d8;font-size:clamp(7px,1.6cqw,8px)}
+.channel-row i{height:8px;border-radius:5px;background:linear-gradient(90deg,#22cbd5,#ff9b20);display:block}
+.channel-row em{font-style:normal;text-align:right;color:#e8faff}
+.satrow{display:flex;align-items:center;gap:5px;margin:4px 0;color:#b1cdd3;font-size:clamp(7px,1.5cqw,8px)}
+.satrow i{display:block;height:5px;border-radius:4px;background:#4de5ed}
+.pref{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:5px 6px;border:1px solid #275362;border-radius:5px;background:#081c25;color:#c9e3e8;font-size:clamp(7px,1.6cqw,8px);margin:4px 0}
+.pref input{accent-color:#2de0e7;width:14px;height:14px}
+.transfer-actions{display:flex;gap:5px;margin-top:6px}.transfer-actions .action{flex:1}
+
+@media(max-width:560px){body{padding:10px}.housing{padding:5px;border-radius:13px}.title{font-size:10px}.title .helper{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title"><span>FIGLICIOUS FIELD INTERFACE · 480×320</span><label id="gpsToggle"><span>GPS PRESENT</span><span class="switch on" role="switch" aria-checked="true" tabindex="0"><i></i></span></label></div>
+  <div class="housing"><main id="screen" class="gps-connected" aria-label="GNOME HOME wardriver display">
+    <header class="top"><div><span class="brand">GNOME <span>HOME</span></span><span class="edition">PIGLET · FIELD MODE</span></div><div class="statuses"><span id="gpsPill" class="pill good">GPS FIX · 8 SAT</span><span class="pill">SD READY</span></div></header>
+    <section id="view" class="view"></section>
+    <nav class="dock" id="dock"></nav>
+  </main></div>
+</div>
+
+<template id="tpl-home">
+<div class="home-grid">
+  <section class="card gps-card">
+    <div class="gps-data">
+      <div class="eyebrow">Miss Direction · GPS POSITION</div>
+      <div class="coord"><div><small>LAT</small><span class="lat">39.43281° N</span></div><div><small>LON</small><span class="lon">123.38124° W</span></div></div>
+      <div class="metrics"><div class="metric"><strong class="speed">0.0</strong><span>MPH</span></div><div class="metric"><strong class="heading">NW</strong><span>COURSE</span></div><div class="metric"><strong class="satCount">8</strong><span>SATS</span></div></div>
+    </div>
+    <div class="miss-panel">
+      <svg class="portrait" viewBox="0 0 120 140" role="img" aria-label="Miss Direction, red-haired navigator">
+        <defs><linearGradient id="hairM" x2="0" y2="1"><stop stop-color="#ffc04b"/><stop offset="1" stop-color="#db5123"/></linearGradient><linearGradient id="coatM" x2="0" y2="1"><stop stop-color="#f3b64e"/><stop offset="1" stop-color="#a64f25"/></linearGradient></defs>
+        <path d="M22 140V102Q22 82 42 74L39 48Q28 24 46 9Q71-3 91 20Q105 36 91 67L94 79Q115 88 118 107V140Z" fill="url(#hairM)"/>
+        <path d="M38 40Q35 18 58 15Q85 14 88 40L84 61Q78 79 61 79Q43 76 39 58Z" fill="#f5c7a3"/>
+        <path d="M35 37Q33 11 59 9Q87 8 94 32L87 43Q73 30 57 31Q46 31 38 46Z" fill="#c77728"/>
+        <path d="M31 28Q61 13 96 27L91 36Q62 29 34 38Z" fill="#e9a63c" stroke="#ffe0a0" stroke-width="2"/>
+        <circle cx="51" cy="48" r="9" fill="none" stroke="#1bbdda" stroke-width="3"/><circle cx="73" cy="48" r="9" fill="none" stroke="#1bbdda" stroke-width="3"/><path d="M60 47H64" stroke="#382919" stroke-width="3"/>
+        <path d="M54 64Q62 70 70 63" fill="none" stroke="#9f4331" stroke-width="2"/>
+        <path d="M38 85Q60 72 83 85L93 140H25Z" fill="url(#coatM)" stroke="#ffcf6b" stroke-width="2"/>
+        <path d="M48 84L60 101 73 83" fill="#172f39" stroke="#ffe0a0" stroke-width="2"/>
+        <circle cx="63" cy="108" r="4" fill="#29e1ec"/><path d="M61 108h4m-2-2v4" stroke="#08202b"/>
+        <path d="M26 105L15 124M91 101l15 13" stroke="#e8b452" stroke-width="6" stroke-linecap="round"/>
+        <path d="M39 29l5-8m33 3 5 8" stroke="#ffdf87" stroke-width="3"/>
+      </svg>
+      <div class="no-gps"><span class="sat">⌁</span><b>WAITING FOR GPS</b><span>Miss Direction appears<br>when a receiver is detected.</span></div>
+    </div>
+  </section>
+  <div class="launches">
+    <button class="card launch dual touch" data-page="wardrive" aria-label="Open Lady Dualbandit's wardriver">
+      <div class="launch-art"><svg viewBox="0 0 100 120" aria-hidden="true">
+        <path d="M10 120V58Q2 22 31 8Q53-2 64 18Q89 5 96 41L91 120Z" fill="#d82ac4"/><path d="M32 35Q34 13 56 15Q76 17 75 40L70 61Q64 74 52 74Q38 70 34 57Z" fill="#edbd98"/>
+        <path d="M29 40Q14 6 44 5Q59 4 64 25L59 37Q49 25 34 45Z" fill="#ff3fa8"/><path d="M61 31Q70 9 86 25Q95 42 75 61L68 55Q83 38 71 31Z" fill="#2dd8ff"/>
+        <circle cx="43" cy="47" r="8" fill="none" stroke="#f344c7" stroke-width="3"/><circle cx="62" cy="47" r="8" fill="none" stroke="#37cfff" stroke-width="3"/><path d="M51 46h3" stroke="#23213a" stroke-width="3"/>
+        <path d="M45 61q8 6 15 0" fill="none" stroke="#a14855" stroke-width="2"/><path d="M25 86q28-21 54 0l10 34H13Z" fill="#6630a0" stroke="#31d8eb" stroke-width="2"/>
+        <path d="M35 89l17 18 17-18" fill="#0e2530" stroke="#f4b6ea" stroke-width="2"/><circle cx="52" cy="109" r="4" fill="#f23cc5"/>
+      </svg></div><div class="launch-copy"><b>LADY<br>DUALBANDIT</b><small>2.4 + 5 GHz<br><span class="tap">TAP TO WARD RIDE ›</span></small></div>
+    </button>
+    <button class="card launch cache touch" data-page="sd" aria-label="Open Cache Cassidy's SD card contents">
+      <div class="launch-art"><svg viewBox="0 0 100 120" aria-hidden="true">
+        <path d="M6 120V67Q8 32 29 18Q49-1 72 18Q94 33 95 66V120Z" fill="#f342c8"/><path d="M32 44Q34 19 54 20Q75 21 75 45L71 65Q64 76 53 76Q39 72 34 61Z" fill="#f1c39a"/>
+        <path d="M29 43Q19 13 47 10Q71 6 81 29L76 42Q55 24 31 54Z" fill="#ff40bf"/><path d="M54 18Q77 8 90 37L80 58 71 48Q81 31 62 29Z" fill="#2bcff1"/>
+        <path d="M31 34Q53 18 79 32L74 39Q51 34 30 42Z" fill="#d18c3d" stroke="#ffe0a1" stroke-width="3"/><rect x="51" y="28" width="13" height="7" rx="3" fill="#19c9e4"/>
+        <circle cx="44" cy="49" r="8" fill="none" stroke="#08c8e7" stroke-width="3"/><circle cx="63" cy="49" r="8" fill="none" stroke="#08c8e7" stroke-width="3"/><path d="M52 48h3" stroke="#392b1d" stroke-width="3"/>
+        <path d="M47 63q7 6 14 0" fill="none" stroke="#af4b55" stroke-width="2"/><path d="M25 88q28-23 55 0l9 32H13Z" fill="#267f79" stroke="#f2c06f" stroke-width="2"/>
+        <path d="M43 88l10 15 11-15" fill="#f7e4c7" stroke="#ffe0a1" stroke-width="2"/><path d="M35 108h37" stroke="#d99334" stroke-width="4"/>
+        <rect x="39" y="101" width="26" height="17" rx="2" fill="#a36322" stroke="#ffd165" stroke-width="2"/><path d="M49 101v17m7-17v17" stroke="#ffd165" stroke-width="2"/>
+      </svg></div><div class="launch-copy"><b>CACHE<br>CASSIDY</b><small>SD CARD · LOGS<br><span class="tap">TAP TO BROWSE ›</span></small></div>
+    </button>
+  </div>
+</div>
+<div class="notice">GNOME HOME · THE FIELD CREW IS READY</div>
+</template>
+
+<template id="tpl-sd">
+<div class="sd-layout">
+  <aside class="cassidy"><span>CACHE CASSIDY</span><svg viewBox="0 0 120 210" role="img" aria-label="Cache Cassidy, treasure keeper">
+    <path d="M14 210V88Q7 48 34 24Q58 0 86 24Q113 47 106 95V210Z" fill="#ea3dc4"/>
+    <path d="M34 61Q33 34 59 31Q84 32 84 61L80 87Q70 103 58 103Q40 98 35 81Z" fill="#f2c19c"/>
+    <path d="M30 61Q15 31 44 18Q76 5 94 41L84 59Q61 35 34 71Z" fill="#ff45bd"/>
+    <path d="M67 25Q98 26 101 67L87 93 77 78Q94 51 72 44Z" fill="#28c9ee"/>
+    <path d="M29 42Q59 18 89 39L84 49Q58 41 31 54Z" fill="#e2a34c" stroke="#ffe0a5" stroke-width="3"/><rect x="49" y="35" width="19" height="8" rx="4" fill="#34d8eb"/>
+    <circle cx="47" cy="65" r="10" fill="none" stroke="#1bd6ee" stroke-width="3"/><circle cx="71" cy="65" r="10" fill="none" stroke="#1bd6ee" stroke-width="3"/><path d="M56 64h5" stroke="#382b1d" stroke-width="3"/>
+    <path d="M49 80q9 7 17 0" fill="none" stroke="#ad4f50" stroke-width="2"/>
+    <path d="M26 120Q57 96 90 120L106 210H12Z" fill="#247c76" stroke="#f4be68" stroke-width="3"/>
+    <path d="M41 117l18 22 16-22" fill="#f8e6ca" stroke="#f6cf82" stroke-width="2"/>
+    <path d="M24 180h74v26H24z" fill="#936020" stroke="#ffd366" stroke-width="3"/><path d="M42 180v26m19-26v26m19-26v26M24 191h74" stroke="#ffd366" stroke-width="3"/>
+  </svg></aside>
+  <div class="filepanel">
+    <div class="filehead"><div><h2>SD CARD CONTENTS</h2><small class="card-status">CARD READY · 8 GB FREE</small></div><button class="back" data-page="home">‹ HOME</button></div>
+    <div class="storage"><i></i></div>
+    <div class="filelist">
+      <button class="file" data-file="logs"><span class="icon">▣</span><span>/logs/<small>Folder · 14 files</small></span><em>OPEN ›</em></button>
+      <button class="file" data-file="latest"><span class="icon">▤</span><span>Fig_WiGLE_1105.csv<small>Today · 2.4 MB</small></span><em>VIEW</em></button>
+      <button class="file" data-file="older"><span class="icon">▤</span><span>Fig_WiGLE_1104.csv<small>Yesterday · 1.1 MB</small></span><em>VIEW</em></button>
+      <button class="file" data-file="settings"><span class="icon">⚙</span><span>wardriver.cfg<small>Settings file</small></span><em>VIEW</em></button>
+    </div>
+  </div>
+</div>
+<div class="notice">CACHE KEEPS THE RECEIPTS · FILE PREVIEW IS DEMO DATA</div>
+</template>
+
+<template id="tpl-wardrive">
+<div class="wd-shell">
+  <div class="subtabs" id="wdTabs"></div>
+  <section class="wd-panel" id="wdPanel"></section>
+</div>
+<div class="notice">LONG-PRESS A CONTACT TO FOXHUNT · SAMPLE DATA IN PREVIEW</div>
+</template>
+
+<script>
+const screen=document.getElementById('screen'), view=document.getElementById('view'), dock=document.getElementById('dock');
+let page='home', gps=true, scanning=true, activeTab='hunt', currentTarget=null, beepEnabled=true;
+const nav=[['home','HOME'],['wardrive','WARD RIDE'],['sd','SD CARD']];
+function setPage(next){page=next;if(next==='wardrive')activeTab='hunt';render()}
+function renderDock(){dock.innerHTML=nav.map(([id,label])=>'<button data-page="'+id+'" class="'+(page===id?'active':'')+'">'+label+'</button>').join('')}
+function render(){const tpl=document.getElementById('tpl-'+page);view.innerHTML=tpl.innerHTML;renderDock();syncGps();if(page==='sd')wireFiles();if(page==='wardrive')wireWardrive()}
+function syncGps(){screen.classList.toggle('gps-connected',gps);const pill=document.getElementById('gpsPill');pill.className='pill '+(gps?'good':'warn');pill.textContent=gps?'GPS FIX · 8 SAT':'NO GPS · SEARCH';document.querySelectorAll('.satCount').forEach(x=>x.textContent=gps?'8':'—');document.querySelectorAll('.lat').forEach(x=>x.textContent=gps?'39.43281° N':'—');document.querySelectorAll('.lon').forEach(x=>x.textContent=gps?'123.38124° W':'—');document.querySelectorAll('.speed').forEach(x=>x.textContent=gps?'0.0':'—');document.querySelectorAll('.heading').forEach(x=>x.textContent=gps?'NW':'—')}
+function wireFiles(){document.querySelectorAll('.file').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('.file').forEach(x=>x.classList.remove('selected'));button.classList.add('selected');const kind=button.dataset.file;if(kind==='logs'){button.querySelector('em').textContent='14 CSV ›'}else{button.querySelector('em').textContent='SELECTED'};}))}
+const wdTabs=[['hunt','HUNT'],['radar','RADAR'],['finds','FINDS'],['security','SEC'],['channel','CHANNEL'],['spectrum','SPECTRUM'],['field','FIELD'],['tools','TOOLS'],['alerts','ALERTS'],['gps','GPS'],['privacy','PRIVACY'],['transfer','TRANSFER']];
+const contacts=[
+ {name:'GNOME_GUEST',sub:'Wi-Fi AP · WPA2 · 2.4 GHz',proto:'Wi-Fi',rssi:-42,seen:1,sights:11,tier:'known',fresh:'REPEAT'},
+ {name:'ESP32-VROOM',sub:'BLE · Espressif · unknown device',proto:'BLE',rssi:-73,seen:2,sights:2,tier:'named',fresh:'NEW'},
+ {name:'Unknown_5G',sub:'Wi-Fi AP · WPA3 · 5 GHz',proto:'Wi-Fi',rssi:-88,seen:3,sights:1,tier:'unknown',fresh:'NEW'}
+];
+let activeFilter='All', sortMode='RSSI';
+function renderWardriveTabs(){const el=document.getElementById('wdTabs');if(!el)return;el.innerHTML=wdTabs.map(([id,label])=>'<button class="subtab '+(activeTab===id?'active':'')+'" data-tab="'+id+'">'+label+'</button>').join('');el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderWardriveTabs();renderWardrivePanel()})}
+function renderWardrivePanel(){const panel=document.getElementById('wdPanel');if(!panel)return;
+ if(activeTab==='hunt') panel.innerHTML=renderHunt();
+ else if(activeTab==='radar') panel.innerHTML='<div class="hunt-head"><strong>LIVE RADAR · SIGNAL TIERS</strong><span class="scanstate">● SAMPLE</span></div><div class="mini-map"><i class="radar-sweep"></i><i class="radar-dot one"></i><i class="radar-dot two"></i><i class="radar-dot three"></i></div><div class="chips"><span class="chip">KNOWN · GREEN</span><span class="chip">NAMED · AMBER</span><span class="chip">UNKNOWN · GRAY</span></div>';
+ else if(activeTab==='finds') panel.innerHTML='<div class="hunt-head"><strong>HISTORICAL FINDS MAP</strong><span class="scanstate">SD LOGS</span></div><div class="map-grid"></div><div class="chips"><span class="chip">24 Wi-Fi</span><span class="chip">12 BLE</span><span class="chip">GPS-tagged 31</span></div>';
+ else if(activeTab==='channel') panel.innerHTML='<div class="grid2"><div class="data-card"><h3>2.4 GHz CHANNELS</h3><div class="channel-row"><span>CH 1</span><i style="width:44%"></i><em>04</em></div><div class="channel-row"><span>CH 6</span><i style="width:82%"></i><em>11</em></div><div class="channel-row"><span>CH 11</span><i style="width:63%"></i><em>08</em></div></div><div class="data-card"><h3>5 GHz CHANNELS</h3><div class="channel-row"><span>CH 36</span><i style="width:32%"></i><em>03</em></div><div class="channel-row"><span>CH 149</span><i style="width:58%"></i><em>07</em></div><p>6 GHz · not supported by C5</p></div><div class="data-card"><h3>CHANNEL ANALYZER</h3><p>Counts nearby access points by channel.</p></div><div class="data-card"><h3>DATA SOURCE</h3><p>Sample values only. Live scan feed not connected.</p></div></div>';
+ else if(activeTab==='spectrum') panel.innerHTML='<div class="hunt-head"><strong>SPECTRUM ANALYZER</strong><span class="scanstate">2.4 / 5 GHz</span></div><svg viewBox="0 0 440 170" width="100%" height="82%" role="img" aria-label="Sample spectrum graph"><path d="M20 150H430M20 110H430M20 70H430M20 30H430" stroke="#245564" fill="none"/><path d="M20 138L45 126 70 132 95 82 120 119 145 105 170 53 195 112 220 120 245 73 270 98 295 42 320 110 345 118 370 66 395 104 430 88" stroke="#2be2ec" stroke-width="3" fill="none"/><path d="M20 150L45 126 70 132 95 82 120 119 145 105 170 53 195 112 220 120 245 73 270 98 295 42 320 110 345 118 370 66 395 104 430 88V150Z" fill="#17c5d522"/><text x="20" y="166" fill="#91b6be" font-size="10">LOW CHANNEL</text><text x="355" y="166" fill="#91b6be" font-size="10">HIGH CHANNEL</text></svg><div class="notice">SAMPLE TRACE · LIVE SPECTRUM HARDWARE NOT CONNECTED</div>';
+ else if(activeTab==='security') panel.innerHTML='<div class="grid2"><div class="data-card"><h3>SECURITY MIX</h3><div class="barline">Open <i style="width:14%"></i> 2</div><div class="barline">WEP <i style="width:3%"></i> 0</div><div class="barline">WPA/WPA2 <i style="width:72%"></i> 18</div><div class="barline">WPA3 <i style="width:35%"></i> 8</div><div class="barline">Enterprise <i style="width:10%"></i> 1</div></div><div class="data-card"><h3>BANDS / CHANNELS</h3><p>2.4 GHz · ch 1 / 6 / 11</p><p>5 GHz · ch 36 / 149</p><p>6 GHz · receiver required</p></div><div class="data-card"><h3>FRAME TYPES</h3><p>Access points · clients · Wi-Fi Direct peers</p></div><div class="data-card"><h3>CAPTURE STATUS</h3><p>Handshake / PMKID capture is not enabled in this build.</p></div></div>';
+ else if(activeTab==='gps') panel.innerHTML='<div class="grid2"><div class="data-card"><h3>GNSS FIX</h3><p>'+(gps?'3D FIX · 8 USED / 12 IN VIEW':'NO FIX · SEARCHING')+'</p><p>HDOP · 0.9</p><p>Speed · 0.0 MPH</p></div><div class="data-card"><h3>CONSTELLATIONS</h3><p>GPS · 5 satellites</p><p>Galileo · 2 satellites</p><p>BeiDou · 1 satellite</p></div><div class="data-card"><h3>SATELLITE SIGNAL</h3><div class="satrow">G07 <i style="width:68%"></i> 42 dB-Hz</div><div class="satrow">G12 <i style="width:82%"></i> 48 dB-Hz</div><div class="satrow">E03 <i style="width:54%"></i> 36 dB-Hz</div></div><div class="data-card"><h3>RECEIVER</h3><p>Optional UART GPS · sample diagnostics</p></div></div>';
+ else if(activeTab==='privacy') panel.innerHTML='<div class="data-card" style="height:100%"><h3>PRIVACY & EXCLUSIONS</h3><label class="pref">Honor SSID _nomap / _optout<input type="checkbox" checked></label><label class="pref">Skip configured device blacklist<input type="checkbox" checked></label><label class="pref">Pause logging inside exclusion zone<input type="checkbox"></label><p>Exclusion zones and blacklist entries are stored in local configuration.</p><button id="addZone" class="action ghost">ADD EXCLUSION ZONE</button><span id="privacyNote" class="offline-note">Preview only · settings are not saved</span></div>';
+ else if(activeTab==='transfer') panel.innerHTML='<div class="grid2"><div class="data-card"><h3>LOCAL LOGS</h3><p>14 CSV files · 31.6 MB</p><p>SD card · ready</p><button id="exportCsv" class="action ghost">EXPORT CSV</button></div><div class="data-card"><h3>UPLOAD QUEUE</h3><p>WiGLE · 4 pending</p><p>WDGWars · 2 pending</p><p>Wardrift · 1 pending</p><span class="chip">Wi-Fi/API setup needed</span></div><div class="data-card"><h3>IMPORT</h3><p>Import a compatible CSV from SD for local map/report views.</p><button id="importCsv" class="action ghost">IMPORT CSV</button></div><div class="data-card"><h3>SYNC STATUS</h3><p id="transferNote">Not connected · preview data</p><button id="uploadNow" class="action">UPLOAD WHEN READY</button></div></div>';
+ else if(activeTab==='field') panel.innerHTML='<div class="grid2"><div class="data-card"><h3>VENDOR / OUI</h3><p>Apple · 06</p><p>Samsung · 04</p><p>Espressif · 03</p><p>Ubiquiti · 02</p></div><div class="data-card"><h3>FORM FACTOR</h3><div class="chips"><span class="chip">Phones</span><span class="chip">Audio</span><span class="chip">IoT</span><span class="chip">Vehicles</span><span class="chip">Beacons</span></div></div><div class="data-card"><h3>SIGHTINGS</h3><p><span class="chip new">FIRST TIME · 04</span></p><p>Repeat devices · 21</p></div><div class="data-card"><h3>SELECTED CONTACT</h3><p>Lifetime sightings and last seen are shown per observed identifier.</p></div></div>';
+ else if(activeTab==='tools') panel.innerHTML='<div class="tool-list"><div class="tool-card"><b>DRONE / REMOTE ID</b><small>BLE / Wi-Fi broadcast discovery</small><small class="ready">BLE READY · Wi-Fi support depends on firmware</small></div><div class="tool-card"><b>MESH NODES</b><small>Meshtastic / MeshCore node IDs</small><small class="needed">LoRa receiver required</small></div><div class="tool-card"><b>ADS-B AIRCRAFT</b><small>ICAO · callsign · altitude · speed</small><small class="needed">ADS-B receiver required</small></div><div class="tool-card"><b>CELLULAR</b><small>Carrier · LTE/5G · cell ID</small><small class="needed">Cellular receiver required</small></div></div>';
+ else if(activeTab==='alerts') panel.innerHTML='<div class="alert-grid"><div class="alert-item"><b>CAMERAS / ALPR</b>Camera and roadside-infrastructure signatures</div><div class="alert-item"><b>PERSONAL TRACKERS</b>BLE tracker ecosystem matches</div><div class="alert-item"><b>PUBLIC-SAFETY RF</b>Possible radio or vehicle identifiers</div><div class="alert-item"><b>RF / TEST GEAR</b>Known development and test-device signatures</div><div class="alert-item"><b>WEARABLES</b>Health, smart-glass and accessory classes</div><div class="alert-item"><b>VERIFY MATCHES</b>Classification is heuristic; confirm before acting.</div></div>';
+ else panel.innerHTML=renderFox();
+ if(activeTab==='hunt') wireHunt(panel);\n if(activeTab==='detail') wireDetail(panel);\n if(activeTab==='privacy') wirePrivacy(panel);\n if(activeTab==='transfer') wireTransfer(panel);
+ if(activeTab==='fox') wireFox(panel)
+}
+function renderHunt(){const all=['All','Wi-Fi','BLE','Classic BT','Cellular','Mesh','ADS-B'];return '<div class="filters">'+all.map(f=>'<button class="filter '+(activeFilter===f?'active':'')+(['All','Wi-Fi','BLE'].includes(f)?'':'offline')+'" data-filter="'+f+'">'+f+'</button>').join('')+'</div><div class="hunt-head"><strong>LIVE CONTACTS · <span id="contactCount">03</span></strong><select id="sortMode" aria-label="Sort contacts"><option>RSSI</option><option>Recency</option><option>Sightings</option><option>Name</option></select></div><div class="contact-list" id="contactList"></div>'}
+function renderContactRows(){const list=document.getElementById('contactList');if(!list)return;let rows=contacts.filter(c=>activeFilter==='All'||c.proto===activeFilter);if(!['All','Wi-Fi','BLE'].includes(activeFilter)){list.innerHTML='<div class="offline-note">'+activeFilter+' · receiver / radio support required on this C5 configuration</div>';document.getElementById('contactCount').textContent='—';return}if(sortMode==='RSSI')rows.sort((a,b)=>b.rssi-a.rssi);if(sortMode==='Recency')rows.sort((a,b)=>a.seen-b.seen);if(sortMode==='Sightings')rows.sort((a,b)=>b.sights-a.sights);if(sortMode==='Name')rows.sort((a,b)=>a.name.localeCompare(b.name));document.getElementById('contactCount').textContent=String(rows.length).padStart(2,'0');list.innerHTML=rows.map((c,i)=>'<button class="contact tier-'+c.tier+'" data-contact="'+i+'"><i class="tier"></i><span><b>'+c.name+'</b><small>'+c.sub+' · '+c.fresh+'</small></span><em>'+c.rssi+' dBm</em><span class="sights">×'+c.sights+'</span></button>').join('');wireContacts(list,rows)}
+function wireHunt(panel){panel.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{activeFilter=b.dataset.filter;renderWardrivePanel()});const select=panel.querySelector('#sortMode');if(select){select.value=sortMode;select.onchange=()=>{sortMode=select.value;renderContactRows()}}renderContactRows()}
+function wireContacts(list,rows){list.querySelectorAll('[data-contact]').forEach(btn=>{let timer=null,held=false;const begin=()=>{held=false;timer=setTimeout(()=>{held=true;currentTarget=rows[Number(btn.dataset.contact)];activeTab='fox';renderWardriveTabs();renderWardrivePanel()},600)};const cancel=()=>{if(timer)clearTimeout(timer);timer=null};btn.addEventListener('pointerdown',begin);['pointerup','pointerleave','pointercancel'].forEach(ev=>btn.addEventListener(ev,cancel));btn.addEventListener('contextmenu',e=>e.preventDefault());btn.onclick=()=>{if(!held){currentTarget=rows[Number(btn.dataset.contact)];activeTab='detail';renderWardriveTabs();renderWardrivePanel()}}})}
+function wireDetail(panel){const t=currentTarget||contacts[0];panel.innerHTML='<div class="grid2"><div class="data-card"><h3>DEVICE DETAIL</h3><p>'+t.name+'</p><p>'+t.sub+'</p><p>MAC · 84:CC:A8:21:7A:10</p><p>Vendor · '+(t.proto==='BLE'?'Espressif':'Unknown')+'</p></div><div class="data-card"><h3>FIRST / LAST SEEN</h3><p>'+t.fresh+' · 09:42 UTC</p><p>Signal · '+t.rssi+' dBm</p><p>Sightings · '+t.sights+'</p></div><div class="data-card"><h3>LOCATION</h3><p>'+ (gps?'39.43281° N · 123.38124° W':'No GPS position')+'</p><p>Stored in local observation history.</p></div><div class="data-card"><h3>LOCATE</h3><p>Hold the live-list item to start Foxhunt.</p><button id="detailFox" class="action">START FOXHUNT</button></div></div>';const b=panel.querySelector('#detailFox');if(b)b.onclick=()=>{activeTab='fox';renderWardriveTabs();renderWardrivePanel()}}
+function wirePrivacy(panel){const b=panel.querySelector('#addZone');if(b)b.onclick=()=>{const n=panel.querySelector('#privacyNote');if(n)n.textContent='Zone draft created in preview · not saved'}}
+function wireTransfer(panel){[['exportCsv','CSV export queued in preview'],['importCsv','Choose a CSV from the SD browser'],['uploadNow','Wi-Fi and service credentials are needed']].forEach(([id,msg])=>{const b=panel.querySelector('#'+id);if(b)b.onclick=()=>{const n=panel.querySelector('#transferNote');if(n)n.textContent=msg}})}
+function renderFox(){const t=currentTarget||contacts[0],heat=Math.max(5,Math.min(96,100+Number(t.rssi)));return '<div class="fox"><aside class="fox-face"><svg viewBox="0 0 125 210" aria-label="Lady Dualbandit foxhunt portrait"><path d="M8 210V94Q0 43 31 19Q61-5 78 25Q104 0 117 47L110 210Z" fill="#e834c7"/><path d="M35 59Q34 32 61 31Q87 31 87 61L81 88Q70 104 59 103Q40 98 35 79Z" fill="#f0c09e"/><path d="M31 60Q17 20 48 14Q70 11 75 39L65 56Q49 39 34 74Z" fill="#ff43b3"/><path d="M72 43Q84 11 103 30Q121 52 91 85L81 76Q100 49 79 43Z" fill="#2bcff1"/><circle cx="50" cy="64" r="10" fill="none" stroke="#ff54cf" stroke-width="4"/><circle cx="73" cy="64" r="10" fill="none" stroke="#35cafa" stroke-width="4"/></svg></aside><div class="fox-info"><div><button class="back" data-tab="hunt">‹ CONTACTS</button><h2>FOXHUNT</h2><small>'+t.name+' · '+t.proto+'</small></div><div><div class="fox-rssi">'+t.rssi+' dBm</div><div class="heat" style="--heat:'+heat+'%"></div><div class="eyebrow" style="margin-top:5px">'+(t.rssi>-55?'HOT':t.rssi>-72?'WARM':'COLD')+' · FOLLOW SIGNAL STRENGTH</div></div><div class="fox-controls"><button id="beepToggle" class="action '+(beepEnabled?'running':'ghost')+'">'+(beepEnabled?'BEEP ON':'SILENT')+'</button><button id="stopFox" class="action ghost">STOP</button></div></div></div>'}
+function wireFox(panel){const back=panel.querySelector('[data-tab="hunt"]');if(back)back.onclick=()=>{activeTab='hunt';renderWardriveTabs();renderWardrivePanel()};const b=panel.querySelector('#beepToggle');if(b)b.onclick=()=>{beepEnabled=!beepEnabled;renderWardrivePanel()};const stop=panel.querySelector('#stopFox');if(stop)stop.onclick=()=>{activeTab='hunt';currentTarget=null;renderWardriveTabs();renderWardrivePanel()}}
+function wireWardrive(){renderWardriveTabs();renderWardrivePanel()}
+document.addEventListener('click',e=>{const target=e.target.closest('[data-page]');if(target)setPage(target.dataset.page)});
+const sw=document.querySelector('.switch');function toggleGps(){gps=!gps;sw.classList.toggle('on',gps);sw.setAttribute('aria-checked',gps);syncGps()}
+sw.addEventListener('click',toggleGps);sw.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleGps()}});
+render();
+</script>
+</body>
+</html>
